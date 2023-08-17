@@ -10,7 +10,8 @@
     "lint:prettier": "prettier --check .",
     "lint": "yarn lint:prettier",
     "lintfix": "prettier --write --list-different .",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "vercel-build": "nuxt build && nuxt generate"
   },
   "lint-staged": {
     "*.**": "prettier --check --ignore-unknown"
