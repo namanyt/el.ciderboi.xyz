@@ -427,12 +427,128 @@
         </div>
       </div>
     </div>
+
+    <!-- Pledge Section -->
+    <section class="bg-[#112720] py-16 h-[75vh]">
+      <div class="container mx-auto">
+        <h2 class="text-3xl font-semibold mb-6 text-neutral-200">
+          Make a Pledge to Reduce Textile Waste
+        </h2>
+        <div
+          class="grid grid-cols-1 gap-32 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        >
+          <!-- Pledge Option 1: Minimal Impact -->
+          <div
+            class="card w-96 bg-base-100 shadow-xl image-full cursor-pointer hover:transform-cpu hover:scale-[1.04] duration-300"
+            @click="selectedPledge = 'minimal'"
+            :class="getMenuItemClass('minimal')"
+          >
+            <figure>
+              <img src="/pledge/minimal.jpg" alt="Minimal Impact" />
+            </figure>
+            <div class="card-body">
+              <h2 class="card-title">Minimal Impact</h2>
+              <p>
+                Commit to buying fewer fast fashion items and opting for
+                sustainable alternatives.
+              </p>
+            </div>
+          </div>
+
+          <!-- Pledge Option 2: Sustainable Choices -->
+          <div
+            class="card w-96 bg-base-100 shadow-xl image-full cursor-pointer hover:transform-cpu hover:scale-[1.04] duration-300"
+            @click="selectedPledge = 'sustainable'"
+            :class="getMenuItemClass('sustainable')"
+          >
+            <figure>
+              <img src="/pledge/sustainable.jpg" alt="Sustainable Choices" />
+            </figure>
+            <div class="card-body">
+              <h2 class="card-title">Sustainable Choices</h2>
+              <p>
+                Opt for quality over quantity, support ethical brands, and
+                prioritize clothing repair and upcycling.
+              </p>
+            </div>
+          </div>
+
+          <!-- Pledge Option 3: Zero Waste Hero -->
+          <div
+            class="card w-96 bg-base-100 shadow-xl image-full cursor-pointer hover:transform-cpu hover:scale-[1.04] duration-300"
+            @click="selectedPledge = 'zero-waste'"
+            :class="getMenuItemClass('zero-waste')"
+          >
+            <figure>
+              <img src="/pledge/hero.jpg" alt="Zero Waste Hero" />
+            </figure>
+            <div class="card-body">
+              <h2 class="card-title">Zero Waste Hero</h2>
+              <p>
+                Commit to reducing textile waste to zero by repurposing,
+                donating, and composting clothing.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pledge Form -->
+        <div v-if="selectedPledge" class="mt-8">
+          <h3 class="text-xl font-semibold mb-2 text-neutral-300">
+            I pledge to:
+            {{
+              getPledgeDescription(
+                selectedPledge == 'minimal'
+                  ? 'minimal'
+                  : selectedPledge == 'sustainable'
+                  ? 'sustainable'
+                  : 'zero-waste'
+              ).name
+            }}
+          </h3>
+          <p class="text-neutral-400">
+            {{
+              getPledgeDescription(
+                selectedPledge == 'minimal'
+                  ? 'minimal'
+                  : selectedPledge == 'sustainable'
+                  ? 'sustainable'
+                  : 'zero-waste'
+              ).desc
+            }}
+          </p>
+          <div class="mt-4">
+            <button @click="submitPledge" class="btn btn-primary">
+              Submit Pledge
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div v-if="sumbitPledgeFlag" class="toast toast-start z-[100] shadow-xl">
+      <div class="alert alert-success">
+        <span
+          >☑ Submitted Pledge to
+          {{
+            getPledgeDescription(
+              selectedPledge == 'minimal'
+                ? 'minimal'
+                : selectedPledge == 'sustainable'
+                ? 'sustainable'
+                : 'zero-waste'
+            ).name
+          }}</span
+        >
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import Navbar from '@/components/Navbar.vue'
+import Icon from 'nuxt-icon'
 
 export default Vue.extend({
   name: 'IndexPage',
@@ -503,6 +619,8 @@ export default Vue.extend({
             'Additionally, investing in advanced wastewater treatment technologies can help capture microplastics before they reach water bodies.',
         },
       ],
+      selectedPledge: '', // Stores the selected pledge option
+      sumbitPledgeFlag: false, // Flag to show the pledge form
     }
   },
   methods: {
@@ -519,6 +637,42 @@ export default Vue.extend({
     closeModal(tab: string = '') {
       this.impactModalId = tab
       this.isModalOpen = false
+    },
+    getMenuItemClass(pledge: any) {
+      return {
+        'menu-item-selected': this.selectedPledge == pledge,
+      }
+    },
+    // Method to get pledge description based on selected pledge
+    getPledgeDescription(pledge: 'minimal' | 'sustainable' | 'zero-waste') {
+      // You can replace this with descriptions for each pledge option
+      const descriptions = {
+        minimal: {
+          name: 'Minimalist',
+          desc: 'Commit to buying fewer fast fashion items and opting for sustainable alternatives.',
+        },
+        sustainable: {
+          name: 'Futurist',
+          desc: 'Opt for quality over quantity, support ethical brands, and prioritize clothing repair and upcycling.',
+        },
+        'zero-waste': {
+          name: 'Zero Waste Hero',
+          desc: 'Commit to reducing textile waste to zero by repurposing, donating, and composting clothing.',
+        },
+      }
+      return descriptions[pledge] || 'a'
+    },
+
+    // Method to submit user's pledge
+    submitPledge() {
+      // Perform actions to submit user's pledge
+      // For example, you can send the pledge data to a server
+      this.sumbitPledgeFlag = true
+      console.log('Pledge submitted:', this.selectedPledge)
+
+      setTimeout(() => {
+        this.sumbitPledgeFlag = false
+      }, 5000)
     },
   },
   computed: {
